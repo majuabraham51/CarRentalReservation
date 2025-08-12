@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: test
+car:
+  inventory:
+    sedan: 2
+    suv: 1
+    van: 1
