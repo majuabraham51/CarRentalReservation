@@ -11,5 +11,8 @@ public record Reservation(Car car, ZonedDateTime startDate, int days) {
     public String toString() {
         return "Reserved " + car.getType() + " from " + startDate.format(formatter) + " for " + days + " days.";
     }
+    public boolean overlaps(ZonedDateTime requestStart, ZonedDateTime requestEnd) {
+        return !(requestEnd.isBefore(startDate) || requestStart.isAfter(startDate.plusDays(days)));
+    }
 }
 
