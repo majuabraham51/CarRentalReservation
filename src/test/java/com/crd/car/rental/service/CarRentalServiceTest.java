@@ -6,6 +6,8 @@ import com.crd.car.rental.model.ReservationCriteria;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.ZonedDateTime;
 import java.util.Map;
@@ -24,8 +26,26 @@ class CarRentalServiceTest {
                 "suv", 1,
                 "van", 1
         ));
-        time= ZonedDateTime.now();
+        time= ZonedDateTime.now().plusSeconds(2);
         carRentalService = new CarRentalService(new CarReservationService(props));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"sedan", "suv", "van"})
+    @Order(1)
+    void reserveAllTypeCarTest(String allCarType) {
+        ReservationCriteria criteria = ReservationCriteria.builder()
+                .carType(allCarType)
+                .startDate(time)
+                .days(3).build();
+
+        assertDoesNotThrow(() -> {
+            carRentalService.rentCar(criteria);
+        });
+        criteria.setCarType("van");
+        criteria.setStartDate(time.plusMinutes(10));
+        criteria.setDays(3);
+        carRentalService.rentCar(criteria);
     }
 
     @Test
@@ -34,23 +54,10 @@ class CarRentalServiceTest {
                 .carType("sedan")
                 .startDate(time.plusMinutes(1))
                 .days(2).build();
-        System.out.println(carRentalService.rentCar(criteria));
-        System.out.println(carRentalService.rentCar(criteria));
-        System.out.println(carRentalService.rentCar(criteria));
+        assertTrue(carRentalService.rentCar(criteria));
+
     }
-
-    @Test
-    void reserveTest() {
-        ReservationCriteria criteria = ReservationCriteria.builder()
-                .carType("sedan")
-                .startDate(time.plusSeconds(2))
-                .days(1)
-                .build();
-
-        boolean sedanStatus = carRentalService.rentCar(criteria);
-        assertTrue(sedanStatus);
-    }
-
+    
     @Test
     void reserveCarNotExistTest() {
         ReservationCriteria criteria = ReservationCriteria.builder()

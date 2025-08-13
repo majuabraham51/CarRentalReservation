@@ -45,5 +45,6 @@ public class CarRentalService {
             throw new IllegalArgumentException("Start date must be in the future & not null");
         if (reservationCriteria.getCarType() == null || reservationCriteria.getCarType().isBlank())
             throw new IllegalArgumentException("Car type must not be null or blank");
+        log.debug("Validation method executed");
     }
 }
