@@ -5,22 +5,24 @@ import com.crd.car.rental.factory.CarFactory;
 import com.crd.car.rental.model.Car;
 import com.crd.car.rental.model.Reservation;
 import com.crd.car.rental.model.ReservationCriteria;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
+@Slf4j
 public class CarReservationService {
 
-    private static final Logger log = LoggerFactory.getLogger(CarReservationService.class);
     private final Map<String, Integer> inventory;
-    private final List<Reservation> reservations = new ArrayList<>();
+    private final List<Reservation> reservations = Collections.synchronizedList(new ArrayList<>());
 
     // Loading all the inventory to Memory
     public CarReservationService(CarDetailsConfig config) {
@@ -58,7 +60,4 @@ public class CarReservationService {
         return reservations;
     }
 
-    public void showInventory() {
-        log.info("Inventory: {}", inventory);
-    }
 }

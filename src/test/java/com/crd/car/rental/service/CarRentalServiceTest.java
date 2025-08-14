@@ -32,7 +32,6 @@ class CarRentalServiceTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"sedan", "suv", "van"})
-    @Order(1)
     void reserveAllTypeCarTest(String allCarType) {
         ReservationCriteria criteria = ReservationCriteria.builder()
                 .carType(allCarType)
@@ -57,7 +56,7 @@ class CarRentalServiceTest {
         assertTrue(carRentalService.rentCar(criteria));
 
     }
-    
+
     @Test
     void reserveCarNotExistTest() {
         ReservationCriteria criteria = ReservationCriteria.builder()
